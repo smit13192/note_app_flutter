@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:note/database/note_database.dart';
 import 'package:note/note/note.dart';
 import 'dart:async';
@@ -23,38 +24,44 @@ class _SeeNotePageState extends State<SeeNotePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-        child: isLoop
-            ? ListView.builder(
-                itemCount: notes.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.of(context).pushReplacementNamed(
-                            "/UpgradeNote",
-                            arguments: notes[index]);
-                      },
-                      title: Text(notes[index].title),
-                      subtitle: Text(notes[index].desc),
-                      trailing: InkWell(
-                          onTap: () {
-                            deleteNote(notes[index].id);
-                            showSnackBar(context);
-                          },
-                          child: const Icon(Icons.delete_rounded)),
-                    ),
-                  );
-                })
-            : const Center(child: CircularProgressIndicator()),
+    return WillPopScope (
+      onWillPop: () async {
+        SystemNavigator.pop();
+        return true;
+      },
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+          child: isLoop
+              ? ListView.builder(
+                  itemCount: notes.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                              "/UpgradeNote",
+                              arguments: notes[index]);
+                        },
+                        title: Text(notes[index].title),
+                        subtitle: Text(notes[index].desc),
+                        trailing: InkWell(
+                            onTap: () {
+                              deleteNote(notes[index].id);
+                              showSnackBar(context);
+                            },
+                            child: const Icon(Icons.delete_rounded)),
+                      ),
+                    );
+                  })
+              : const Center(child: CircularProgressIndicator()),
+        ),
+        floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.pushNamed(context, "/AddNote");
+            }),
       ),
-      floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            Navigator.pushNamed(context, "/AddNote");
-          }),
     );
   }
 

@@ -28,61 +28,55 @@ class _UpdateNoteState extends State<UpdateNote> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(context);
-        return true;
-      },
-      child: Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 35),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "Update Note",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                SizedBox(
-                  height: minHeight * 3,
-                ),
-                TextFormField(
-                  controller: title,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Enter Title"),
-                ),
-                SizedBox(
-                  height: minHeight * 3,
-                ),
-                TextFormField(
-                  controller: desc,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Enter Description"),
-                ),
-                SizedBox(
-                  height: minHeight * 3,
-                ),
-                ElevatedButton(
-                    onPressed: () async {
-                      if (title.text.trim().isNotEmpty &&
-                          desc.text.trim().isNotEmpty) {
-                        widget.note.title = title.text.trim();
-                        widget.note.desc = desc.text.trim();
-                        upgradeNote(widget.note);
-                        Navigator.pushReplacementNamed(context, "/SeeNote");
-                      }
-                    },
-                    style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: minHeight * 3),
-                    )),
-                    child: const Text("Update Note"))
-              ],
-            ),
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 35),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                "Update Note",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline1,
+              ),
+              SizedBox(
+                height: minHeight * 3,
+              ),
+              TextFormField(
+                controller: title,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(), labelText: "Enter Title"),
+              ),
+              SizedBox(
+                height: minHeight * 3,
+              ),
+              TextFormField(
+                controller: desc,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Enter Description"),
+              ),
+              SizedBox(
+                height: minHeight * 3,
+              ),
+              ElevatedButton(
+                  onPressed: () async {
+                    if (title.text.trim().isNotEmpty &&
+                        desc.text.trim().isNotEmpty) {
+                      widget.note.title = title.text.trim();
+                      widget.note.desc = desc.text.trim();
+                      upgradeNote(widget.note);
+                      Navigator.pushReplacementNamed(context, "/SeeNote");
+                    }
+                  },
+                  style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(vertical: minHeight * 3),
+                  )),
+                  child: const Text("Update Note"))
+            ],
           ),
         ),
       ),

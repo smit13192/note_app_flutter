@@ -17,61 +17,55 @@ class _NoteAddPageState extends State<NoteAddPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(context);
-        return true;
-      },
-      child: Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 35),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "Add Note",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                SizedBox(
-                  height: minHeight * 3,
-                ),
-                TextFormField(
-                  controller: title,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Enter Title"),
-                ),
-                SizedBox(
-                  height: minHeight * 3,
-                ),
-                TextFormField(
-                  controller: desc,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Enter Description"),
-                ),
-                SizedBox(
-                  height: minHeight * 3,
-                ),
-                ElevatedButton(
-                    onPressed: () async {
-                      if (title.text.trim().isNotEmpty &&
-                          desc.text.trim().isNotEmpty) {
-                        insertNote();
-                        Navigator.pushReplacementNamed(context, "/SeeNote");
-                      } else {
-                        showSnackBar(context);
-                      }
-                    },
-                    style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: minHeight * 3),
-                    )),
-                    child: const Text("Add Note"))
-              ],
-            ),
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 35),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                "Add Note",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline1,
+              ),
+              SizedBox(
+                height: minHeight * 3,
+              ),
+              TextFormField(
+                controller: title,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(), labelText: "Enter Title"),
+              ),
+              SizedBox(
+                height: minHeight * 3,
+              ),
+              TextFormField(
+                controller: desc,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Enter Description"),
+              ),
+              SizedBox(
+                height: minHeight * 3,
+              ),
+              ElevatedButton(
+                  onPressed: () async {
+                    if (title.text.trim().isNotEmpty &&
+                        desc.text.trim().isNotEmpty) {
+                      insertNote();
+                      Navigator.pushReplacementNamed(context, "/SeeNote");
+                    } else {
+                      showSnackBar(context);
+                    }
+                  },
+                  style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(vertical: minHeight * 3),
+                  )),
+                  child: const Text("Add Note"))
+            ],
           ),
         ),
       ),
