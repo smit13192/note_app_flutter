@@ -24,7 +24,7 @@ class RouteGenerate {
         }
 
       default:
-        return MaterialPageRoute(builder: (context) => const NoteAddPage());
+        return MaterialPageRoute(builder: (context) => const SeeNotePage());
     }
   }
 }
