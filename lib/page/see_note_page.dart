@@ -13,6 +13,8 @@ class SeeNotePage extends StatefulWidget {
 class _SeeNotePageState extends State<SeeNotePage> {
   late List<Note> notes;
 
+  bool isLoop = false;
+
   @override
   void initState() {
     super.initState();
@@ -23,23 +25,28 @@ class _SeeNotePageState extends State<SeeNotePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical:8.0,horizontal: 10),
-        child: ListView.builder(
-            itemCount: notes.length,
-            itemBuilder: (context, index) {
-              return Card(
-                child: ListTile(
-                  title: Text(notes[index].title),
-                  subtitle: Text(notes[index].desc),
-                  trailing: InkWell(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+        child: isLoop
+            ? ListView.builder(
+                itemCount: notes.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
                       onTap: () {
-                        deleteNote(notes[index].id);
-                        showSnackBar(context);
+                        Navigator.of(context).pushNamed("/UpgradeNote",arguments: notes[index]);
                       },
-                      child: const Icon(Icons.delete_rounded)),
-                ),
-              );
-            }),
+                      title: Text(notes[index].title),
+                      subtitle: Text(notes[index].desc),
+                      trailing: InkWell(
+                          onTap: () {
+                            deleteNote(notes[index].id);
+                            showSnackBar(context);
+                          },
+                          child: const Icon(Icons.delete_rounded)),
+                    ),
+                  );
+                })
+            : const Center(child: CircularProgressIndicator()),
       ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
@@ -51,7 +58,9 @@ class _SeeNotePageState extends State<SeeNotePage> {
 
   Future loadData() async {
     notes = await NoteDataBase().getNotes();
-    setState(() {});
+    setState(() {
+      isLoop = true;
+    });
   }
 
   void deleteNote(int? id) async {
