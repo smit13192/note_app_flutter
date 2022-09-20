@@ -55,7 +55,7 @@ class _NoteAddPageState extends State<NoteAddPage> {
                     if (title.text.trim().isNotEmpty &&
                         desc.text.trim().isNotEmpty) {
                       insertNote();
-                      Navigator.pushNamed(context, "/SeeNote");
+                      Navigator.pushReplacementNamed(context, "/SeeNote");
                     } else {
                       showSnackBar(context);
                     }

@@ -33,7 +33,9 @@ class _SeeNotePageState extends State<SeeNotePage> {
                   return Card(
                     child: ListTile(
                       onTap: () {
-                        Navigator.of(context).pushNamed("/UpgradeNote",arguments: notes[index]);
+                        Navigator.of(context).pushReplacementNamed(
+                            "/UpgradeNote",
+                            arguments: notes[index]);
                       },
                       title: Text(notes[index].title),
                       subtitle: Text(notes[index].desc),
@@ -51,12 +53,13 @@ class _SeeNotePageState extends State<SeeNotePage> {
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            Navigator.of(context).pushNamed("/AddNote");
+            Navigator.pushNamed(context, "/AddNote");
           }),
     );
   }
 
   Future loadData() async {
+    await Future.delayed(const Duration(seconds: 1));
     notes = await NoteDataBase().getNotes();
     setState(() {
       isLoop = true;
