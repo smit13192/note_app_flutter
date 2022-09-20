@@ -14,9 +14,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      themeMode: ThemeMode.light,
       theme: MyTheme.lightTheme(),
-      darkTheme: MyTheme.darkTheme(),
-      initialRoute: "/",
+      initialRoute: "/SeeNote",
       onGenerateRoute: RouteGenerate.generateRoute,
     );
   }

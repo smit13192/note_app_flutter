@@ -6,7 +6,7 @@ import '../page/see_note_page.dart';
 class RouteGenerate {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case "/":
+      case "/AddNote":
         return MaterialPageRoute(builder: (context) => const NoteAddPage());
       case "/SeeNote":
         return MaterialPageRoute(builder: (context)=>const SeeNotePage());

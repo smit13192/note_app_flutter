@@ -1,16 +1,17 @@
 class Note {
-  int? _id;
+  int? id;
   String title;
   String desc;
 
-  Note(this.title, this.desc);
+  Note({this.id, required this.title, required this.desc});
 
-  Note.withId(this._id, this.title, this.desc);
+  factory Note.fromMap(Map<String, Object?> map) => Note(
+      id: map["id"] as int?,
+      title: map["title"] as String,
+      desc: map["desc"] as String);
 
-  factory Note.fromMap(Map<String, dynamic> map) =>
-      Note.withId(map["id"], map["id"], map["desc"]);
+  Map<String, Object?> toMap() => {"id": id, "title": title, "desc": desc};
 
-  Map<String, dynamic> toMap() => {"id": _id, "title": title, "desc": desc};
-
-  int? get id => _id;
+  Note copy({int? id, String? title, String? desc}) => Note(
+      id: id ?? this.id, title: title ?? this.title, desc: desc ?? this.desc);
 }
