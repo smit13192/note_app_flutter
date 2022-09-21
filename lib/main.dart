@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:note/page/add_note_page.dart';
 import 'package:note/route/generate_route.dart';
 import 'package:note/theme/theme.dart';
 
@@ -14,8 +13,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      themeMode: ThemeMode.light,
       theme: MyTheme.lightTheme(),
-      darkTheme: MyTheme.darkTheme(),
       initialRoute: "/",
       onGenerateRoute: RouteGenerate.generateRoute,
     );

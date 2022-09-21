@@ -1,16 +1,23 @@
 class Note {
-  int? _id;
+  int? id;
   String title;
   String desc;
+  int priority;
 
-  Note(this.title, this.desc);
+  Note(this.title, this.desc, this.priority);
 
-  Note.withId(this._id, this.title, this.desc);
+  Note.withId(this.id, this.title, this.desc, this.priority);
 
-  factory Note.fromMap(Map<String, dynamic> map) =>
-      Note.withId(map["id"], map["id"], map["desc"]);
+  factory Note.fromMap(Map<String, Object?> map) => Note.withId(
+      map["id"] as int,
+      map["title"] as String,
+      map["desc"] as String,
+      map["priority"] as int);
 
-  Map<String, dynamic> toMap() => {"id": _id, "title": title, "desc": desc};
+  Map<String, Object?> toMap() =>
+      {"id": id, "title": title, "desc": desc, "priority": priority};
 
-  int? get id => _id;
+  Note copy({int? id, String? title, String? desc, int? priority}) =>
+      Note.withId(id ?? id, title ?? this.title, desc ?? this.desc,
+          priority ?? this.priority);
 }

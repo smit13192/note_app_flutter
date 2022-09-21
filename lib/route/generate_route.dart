@@ -7,9 +7,9 @@ class RouteGenerate {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case "/":
-        return MaterialPageRoute(builder: (context) => const NoteAddPage());
-      case "/SeeNote":
-        return MaterialPageRoute(builder: (context)=>const SeeNotePage());
+        return MaterialPageRoute(builder: (context) => const SeeNotePage());
+      case "/AddNote":
+        return MaterialPageRoute(builder: (context)=>const NoteAddPage());
       default:
         return MaterialPageRoute(builder: (context) => const NoteAddPage());
     }
