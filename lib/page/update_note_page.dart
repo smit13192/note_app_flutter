@@ -89,6 +89,7 @@ class _UpdateNoteState extends State<UpdateNote> {
   }
 
   _upgradeNote(Note note) async {
-    final int = await NoteDataBase().upgradeNote(note);
+    NoteDataBase noteDataBase = NoteDataBase();
+    final int = await noteDataBase.upgradeNote(note);
   }
 }

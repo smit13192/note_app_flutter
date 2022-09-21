@@ -73,7 +73,8 @@ class _SeeNotePageState extends State<SeeNotePage> {
   }
 
   void _deleteNote(int? id) async {
-    var success = await NoteDataBase().deleteNote(id!);
+    NoteDataBase noteDataBase = NoteDataBase();
+    var success = await noteDataBase.deleteNote(id!);
     _loadData();
   }
 

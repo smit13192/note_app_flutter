@@ -74,7 +74,8 @@ class _NoteAddPageState extends State<NoteAddPage> {
 
   _insertNote() async {
     Note note = Note(title: title.text.trim(), desc: desc.text.trim());
-    note = (await NoteDataBase().insertNote(note));
+    NoteDataBase noteDataBase = NoteDataBase();
+    note = (await noteDataBase.insertNote(note));
   }
 
   _showSnackBar(BuildContext context,String content) {
