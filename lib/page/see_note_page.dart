@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:note/database/note_database.dart';
 import 'package:note/note/note.dart';
+import 'package:note/page/add_note_page.dart';
 
 class SeeNotePage extends StatefulWidget {
   const SeeNotePage({Key? key}) : super(key: key);
@@ -45,10 +46,21 @@ class _SeeNotePageState extends State<SeeNotePage> {
                       itemCount: notes.length,
                       itemBuilder: (context, index) {
                         return Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0)),
                           elevation: 2,
                           margin: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
+                              horizontal: 8, vertical: 8),
                           child: ListTile(
+                            // card long pressed when update note
+                            onLongPress: () {
+                              // update note false
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          NoteAddPage(notes[index], false)));
+                            },
                             leading: CircleAvatar(
                               backgroundColor: notes[index].priority == 1
                                   ? Colors.redAccent
@@ -74,8 +86,14 @@ class _SeeNotePageState extends State<SeeNotePage> {
                       }),
                 ),
           floatingActionButton: FloatingActionButton(
+            tooltip: "Add New Note",
             onPressed: () {
-              Navigator.pushNamed(context, "/AddNote");
+              // add new note
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          NoteAddPage(Note("", "", 1), true)));
             },
             child: const Icon(Icons.add),
           ),

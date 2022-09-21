@@ -3,12 +3,16 @@ import 'package:note/database/note_database.dart';
 import 'package:note/note/note.dart';
 
 class NoteAddPage extends StatefulWidget {
-  const NoteAddPage({super.key});
+  Note note;
+  bool isInserted;
+
+  NoteAddPage(this.note, this.isInserted, {super.key});
 
   @override
   State<NoteAddPage> createState() => _NoteAddPageState();
 }
 
+// if isInserted is true when insert new note then update note
 class _NoteAddPageState extends State<NoteAddPage> {
   final NoteDataBase _database = NoteDataBase();
 
@@ -16,8 +20,19 @@ class _NoteAddPageState extends State<NoteAddPage> {
   final _desc = TextEditingController();
   final double _minHeight = 5;
 
+  // this two are the choose option high means 1 and low means 2
   final List<String> _priority = ["High", "Low"];
-  String _choosePriority = "High";
+  late String _choosePriority;
+
+  // init state ma set _choosePriority,TextFormField for title and TextFormField for desc
+  @override
+  void initState() {
+    super.initState();
+    _choosePriority = widget.note.priority == 1 ? "High" : "Low";
+    _title.text = widget.note.title;
+    _desc.text = widget.note.desc;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +49,8 @@ class _NoteAddPageState extends State<NoteAddPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "Add Note",
+                  // if isInserted is true when add note else Update Note
+                  widget.isInserted ? "Add Note" : "Update Note",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline1,
                 ),
@@ -84,8 +100,10 @@ class _NoteAddPageState extends State<NoteAddPage> {
                       if (_title.text.trim().isNotEmpty &&
                           _desc.text.trim().isNotEmpty) {
                         _insertNote();
-                        Navigator.pushReplacementNamed(context, "/");
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, "/", (Route<dynamic> route) => false);
                       } else {
+                        // see snackBar when input text is invalid
                         _showSnackBar(
                             context, "Enter valid title and description");
                       }
@@ -94,7 +112,10 @@ class _NoteAddPageState extends State<NoteAddPage> {
                         padding: MaterialStateProperty.all(
                       EdgeInsets.symmetric(vertical: _minHeight * 3),
                     )),
-                    child: const Text("Add Note"))
+                    // if isInserted is true when add note else Update Note
+                    child: widget.isInserted
+                        ? const Text("Add Note")
+                        : const Text("Update Note"))
               ],
             ),
           ),
@@ -104,11 +125,27 @@ class _NoteAddPageState extends State<NoteAddPage> {
   }
 
   void _insertNote() async {
-    bool isHigh = _choosePriority == "High";
-    Note note = Note(_title.text.trim(), _desc.text.trim(), isHigh ? 1 : 2);
-    note = (await _database.insertNote(note));
+    if (widget.isInserted) {
+      // add new note
+      bool isHigh = _choosePriority == "High";
+      // make new note
+      Note note = Note(_title.text.trim(), _desc.text.trim(), isHigh ? 1 : 2);
+      // inserted new note
+      note = (await _database.insertNote(note));
+    } else {
+      // condition check if _choosePriority high when true else false
+      bool isHigh = _choosePriority == "High";
+      // set note title and desc
+      widget.note.title = _title.text.trim();
+      widget.note.desc = _desc.text.trim();
+      // isHigh is true when 1 else 2
+      widget.note.priority = isHigh ? 1 : 2;
+      // update note for this is note
+      final success = await _database.upgradeNote(widget.note);
+    }
   }
 
+  // see snackBar when input text is invalid
   void _showSnackBar(BuildContext context, String content) {
     var snackBar = SnackBar(content: Text(content));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

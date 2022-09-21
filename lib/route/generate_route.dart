@@ -8,10 +8,8 @@ class RouteGenerate {
     switch (settings.name) {
       case "/":
         return MaterialPageRoute(builder: (context) => const SeeNotePage());
-      case "/AddNote":
-        return MaterialPageRoute(builder: (context)=>const NoteAddPage());
       default:
-        return MaterialPageRoute(builder: (context) => const NoteAddPage());
+        return MaterialPageRoute(builder: (context) => const SeeNotePage());
     }
   }
 }
