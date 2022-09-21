@@ -62,6 +62,7 @@ class _NoteAddPageState extends State<NoteAddPage> {
                 ),
                 TextFormField(
                   controller: _title,
+                  keyboardType: TextInputType.text,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(), labelText: "Enter Title"),
                 ),
@@ -70,6 +71,7 @@ class _NoteAddPageState extends State<NoteAddPage> {
                 ),
                 TextFormField(
                   controller: _desc,
+                  keyboardType: TextInputType.text,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: "Enter Description"),
@@ -84,7 +86,7 @@ class _NoteAddPageState extends State<NoteAddPage> {
                         _insertNote();
                         Navigator.pushReplacementNamed(context, "/");
                       } else {
-                        _shoWSnackBar(
+                        _showSnackBar(
                             context, "Enter valid title and description");
                       }
                     },
@@ -107,7 +109,7 @@ class _NoteAddPageState extends State<NoteAddPage> {
     note = (await _database.insertNote(note));
   }
 
-  void _shoWSnackBar(BuildContext context, String content) {
+  void _showSnackBar(BuildContext context, String content) {
     var snackBar = SnackBar(content: Text(content));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
