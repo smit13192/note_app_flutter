@@ -54,10 +54,10 @@ class _NoteAddPageState extends State<NoteAddPage> {
                   onPressed: () async {
                     if (title.text.trim().isNotEmpty &&
                         desc.text.trim().isNotEmpty) {
-                      insertNote();
+                      _insertNote();
                       Navigator.pushReplacementNamed(context, "/SeeNote");
                     } else {
-                      showSnackBar(context);
+                      _showSnackBar(context,"Enter valid title and description");
                     }
                   },
                   style: ButtonStyle(
@@ -72,17 +72,13 @@ class _NoteAddPageState extends State<NoteAddPage> {
     );
   }
 
-  void insertNote() async {
+  _insertNote() async {
     Note note = Note(title: title.text.trim(), desc: desc.text.trim());
     note = (await NoteDataBase().insertNote(note));
   }
 
-  void showSnackBar(BuildContext context) {
-    var alertDialog = const AlertDialog(
-      icon: Icon(Icons.warning_rounded),
-      title: Text('Enter valid title and description'),
-      content: Text("Please enter valid title and description to the form"),
-    );
-    showDialog(context: context, builder: (context) => alertDialog);
+  _showSnackBar(BuildContext context,String content) {
+    var snackBar = SnackBar(content: Text(content));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

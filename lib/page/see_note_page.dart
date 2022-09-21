@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:note/database/note_database.dart';
 import 'package:note/note/note.dart';
-import 'dart:async';
 
 class SeeNotePage extends StatefulWidget {
   const SeeNotePage({Key? key}) : super(key: key);
@@ -12,43 +11,44 @@ class SeeNotePage extends StatefulWidget {
 }
 
 class _SeeNotePageState extends State<SeeNotePage> {
-  late List<Note> notes;
+  late List<Note> _notes;
 
-  bool isLoop = false;
+  bool _isNull = false;
 
   @override
   void initState() {
     super.initState();
-    loadData();
+    _loadData();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope (
       onWillPop: () async {
+        _loadData();
         SystemNavigator.pop();
         return true;
       },
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-          child: isLoop
+          child: _isNull
               ? ListView.builder(
-                  itemCount: notes.length,
+                  itemCount: _notes.length,
                   itemBuilder: (context, index) {
                     return Card(
                       child: ListTile(
                         onTap: () {
                           Navigator.of(context).pushNamed(
                               "/UpgradeNote",
-                              arguments: notes[index]);
+                              arguments: _notes[index]);
                         },
-                        title: Text(notes[index].title),
-                        subtitle: Text(notes[index].desc),
+                        title: Text(_notes[index].title),
+                        subtitle: Text(_notes[index].desc),
                         trailing: InkWell(
                             onTap: () {
-                              deleteNote(notes[index].id);
-                              showSnackBar(context);
+                              _deleteNote(_notes[index].id);
+                              _showSnackBar(context,"Delete note");
                             },
                             child: const Icon(Icons.delete_rounded)),
                       ),
@@ -65,24 +65,20 @@ class _SeeNotePageState extends State<SeeNotePage> {
     );
   }
 
-  Future loadData() async {
-    await Future.delayed(const Duration(seconds: 1));
-    notes = await NoteDataBase().getNotes();
+  _loadData() async {
+    _notes = await NoteDataBase().getNotes();
     setState(() {
-      isLoop = true;
+      _isNull = true;
     });
   }
 
-  void deleteNote(int? id) async {
+  void _deleteNote(int? id) async {
     var success = await NoteDataBase().deleteNote(id!);
-    loadData();
+    _loadData();
   }
 
-  void showSnackBar(BuildContext context) {
-    var alertDialog = const AlertDialog(
-      icon: Icon(Icons.delete_rounded),
-      title: Text('delete successfully'),
-    );
-    showDialog(context: context, builder: (context) => alertDialog);
+  _showSnackBar(BuildContext context,String content) {
+    var snackBar = SnackBar(content: Text(content));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
