@@ -79,10 +79,14 @@ class _NoteAddPageState extends State<NoteAddPage> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      if (_title.text.isNotEmpty && _desc.text.isNotEmpty) {
+                      if (_title.text.trim().isNotEmpty &&
+                          _desc.text.trim().isNotEmpty) {
                         _insertNote();
+                        Navigator.pushReplacementNamed(context, "/");
+                      } else {
+                        _shoWSnackBar(
+                            context, "Enter valid title and description");
                       }
-                      Navigator.pushReplacementNamed(context, "/");
                     },
                     style: ButtonStyle(
                         padding: MaterialStateProperty.all(
@@ -99,7 +103,12 @@ class _NoteAddPageState extends State<NoteAddPage> {
 
   void _insertNote() async {
     bool isHigh = _choosePriority == "High";
-    Note note = Note(_title.text, _desc.text, isHigh ? 1 : 2);
+    Note note = Note(_title.text.trim(), _desc.text.trim(), isHigh ? 1 : 2);
     note = (await _database.insertNote(note));
+  }
+
+  void _shoWSnackBar(BuildContext context, String content) {
+    var snackBar = SnackBar(content: Text(content));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
