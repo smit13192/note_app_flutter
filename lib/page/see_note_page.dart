@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:note/database/note_database.dart';
 import 'package:note/note/note.dart';
 import 'package:note/page/add_note_page.dart';
+import 'package:note/page/desc_page.dart';
 
 class SeeNotePage extends StatefulWidget {
   const SeeNotePage({Key? key}) : super(key: key);
@@ -40,51 +41,52 @@ class _SeeNotePageState extends State<SeeNotePage> {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
+              : notes.isNotEmpty
+                  ? ListView.builder(
                       itemCount: notes.length,
                       itemBuilder: (context, index) {
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0)),
-                          elevation: 2,
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 8),
-                          child: ListTile(
-                            // card long pressed when update note
-                            onLongPress: () {
-                              // update note false
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          NoteAddPage(notes[index], false)));
-                            },
-                            leading: CircleAvatar(
-                              backgroundColor: notes[index].priority == 1
-                                  ? Colors.redAccent
-                                  : Colors.greenAccent,
-                              child: Icon(
-                                notes[index].priority == 1
-                                    ? Icons.arrow_upward_rounded
-                                    : Icons.arrow_downward_rounded,
-                                color: Colors.white,
-                              ),
-                            ),
-                            title: Text(notes[index].title),
-                            subtitle: Text(notes[index].desc),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete_rounded),
-                              onPressed: () {
-                                _showSnackBar(context, notes[index],
-                                    "Are you sure delete note");
-                              },
+                        return ListTile(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SeeDescriptionPage(notes[index])));
+                          },
+                          // card long pressed when update note
+                          onLongPress: () {
+                            // update note false
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        NoteAddPage(notes[index], 2)));
+                          },
+                          leading: CircleAvatar(
+                            backgroundColor: notes[index].priority == 1
+                                ? Colors.redAccent
+                                : Colors.greenAccent,
+                            child: Icon(
+                              notes[index].priority == 1
+                                  ? Icons.arrow_upward_rounded
+                                  : Icons.arrow_downward_rounded,
+                              color: Colors.white,
                             ),
                           ),
+                          title: Text(notes[index].title),
+                          subtitle: _giveDesc(notes[index]),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete_rounded),
+                            onPressed: () {
+                              _showSnackBar(context, notes[index],
+                                  "Are you sure delete note");
+                            },
+                          ),
                         );
-                      }),
-                ),
+                      })
+                  : const Center(
+                      child: Text("Add Note"),
+                    ),
           floatingActionButton: FloatingActionButton(
             tooltip: "Add New Note",
             onPressed: () {
@@ -92,8 +94,7 @@ class _SeeNotePageState extends State<SeeNotePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          NoteAddPage(Note("", "", 1), true)));
+                      builder: (context) => NoteAddPage(Note("", "", 1), 1)));
             },
             child: const Icon(Icons.add),
           ),
@@ -125,5 +126,15 @@ class _SeeNotePageState extends State<SeeNotePage> {
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Text _giveDesc(Note note) {
+    return note.desc.length > 35
+        ? note.desc.contains("\n")
+            ? Text("${note.desc.substring(0, note.desc.indexOf("\n"))}.....")
+            : Text("${note.desc.substring(0, 30)}.....")
+        : note.desc.contains("\n")
+            ? Text("${note.desc.substring(0, note.desc.indexOf("\n"))}.....")
+            : Text(note.desc);
   }
 }

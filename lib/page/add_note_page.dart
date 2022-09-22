@@ -1,10 +1,11 @@
 import "package:flutter/material.dart";
 import 'package:note/database/note_database.dart';
 import 'package:note/note/note.dart';
+import 'package:note/page/desc_page.dart';
 
 class NoteAddPage extends StatefulWidget {
   Note note;
-  bool isInserted;
+  int isInserted;
 
   NoteAddPage(this.note, this.isInserted, {super.key});
 
@@ -38,7 +39,15 @@ class _NoteAddPageState extends State<NoteAddPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context);
+        if (widget.isInserted == 3) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SeeDescriptionPage(widget.note)));
+        } else {
+          Navigator.pop(context);
+        }
+
         return true;
       },
       child: Scaffold(
@@ -50,7 +59,7 @@ class _NoteAddPageState extends State<NoteAddPage> {
               children: [
                 Text(
                   // if isInserted is true when add note else Update Note
-                  widget.isInserted ? "Add Note" : "Update Note",
+                  widget.isInserted == 1 ? "Add Note" : "Update Note",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline1,
                 ),
@@ -87,7 +96,9 @@ class _NoteAddPageState extends State<NoteAddPage> {
                 ),
                 TextFormField(
                   controller: _desc,
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 1,
+                  maxLines: 5,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: "Enter Description"),
@@ -100,8 +111,7 @@ class _NoteAddPageState extends State<NoteAddPage> {
                       if (_title.text.trim().isNotEmpty &&
                           _desc.text.trim().isNotEmpty) {
                         _insertNote();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, "/", (Route<dynamic> route) => false);
+                        _navigatePage();
                       } else {
                         // see snackBar when input text is invalid
                         _showSnackBar(
@@ -113,7 +123,7 @@ class _NoteAddPageState extends State<NoteAddPage> {
                       EdgeInsets.symmetric(vertical: _minHeight * 3),
                     )),
                     // if isInserted is true when add note else Update Note
-                    child: widget.isInserted
+                    child: widget.isInserted == 1
                         ? const Text("Add Note")
                         : const Text("Update Note"))
               ],
@@ -125,7 +135,7 @@ class _NoteAddPageState extends State<NoteAddPage> {
   }
 
   void _insertNote() async {
-    if (widget.isInserted) {
+    if (widget.isInserted == 1) {
       // add new note
       bool isHigh = _choosePriority == "High";
       // make new note
@@ -142,6 +152,18 @@ class _NoteAddPageState extends State<NoteAddPage> {
       widget.note.priority = isHigh ? 1 : 2;
       // update note for this is note
       final success = await _database.upgradeNote(widget.note);
+    }
+  }
+
+  _navigatePage() {
+    if (widget.isInserted == 1 || widget.isInserted == 2) {
+      Navigator.pushNamedAndRemoveUntil(
+          context, "/", (Route<dynamic> route) => false);
+    } else {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SeeDescriptionPage(widget.note)));
     }
   }
 
