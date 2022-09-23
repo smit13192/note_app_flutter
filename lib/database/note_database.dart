@@ -39,12 +39,12 @@ class NoteDataBase {
       return _database!;
     }
     // else initialize object and return
-    _database = await initializeDatabase();
+    _database = await _initDB();
     return _database!;
   }
 
   // initialize database function when database is the null
-  Future<Database> initializeDatabase() async {
+  Future<Database> _initDB() async {
     // give the directory
     Directory directory = await getApplicationDocumentsDirectory();
 
@@ -68,7 +68,6 @@ class NoteDataBase {
     final db = await database;
     final success = await db.insert(tableName, note.toMap());
     note = note.copy(id: success);
-    print(note.id);
     return note;
   }
 

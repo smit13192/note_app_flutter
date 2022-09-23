@@ -67,22 +67,6 @@ class _NoteAddPageState extends State<NoteAddPage> {
                 SizedBox(
                   height: _minHeight * 2,
                 ),
-                /* DropdownButton<String>(
-                  itemHeight: 60,
-                  elevation: 20,
-                  items: _priority
-                      .map((dropDownMenuItem) => DropdownMenuItem<String>(
-                            value: dropDownMenuItem,
-                            child: Text(dropDownMenuItem),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _choosePriority = value!;
-                    });
-                  },
-                  value: _choosePriority,
-                ),*/ // this is the dropdown button
                 SizedBox(
                   height: _minHeight * 3,
                 ),
