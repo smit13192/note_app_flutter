@@ -17,84 +17,75 @@ class SeeDescriptionPage extends StatelessWidget {
             context, "/", (Route<dynamic> route) => false);
         return true;
       },
-      child: SafeArea(
-        child: Scaffold(
-            body: Padding(
-          padding:
-              const EdgeInsets.only(left: 16.0, right: 16, top: 20, bottom: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Hero(
-                tag: Key(note.title),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(note.title),
+        ),
+          body: Padding(
+        padding:
+            const EdgeInsets.only(left: 10.0, right: 10, top: 10, bottom: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+                child: SingleChildScrollView(
+              child: Hero(
+                tag: Key(note.desc),
                 child: Text(
-                  note.title,
-                  style: Theme.of(context).textTheme.headline1,
+                  note.desc,
+                  style: Theme.of(context).textTheme.headline3,
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Expanded(
-                  child: SingleChildScrollView(
-                child: Hero(
-                  tag: Key(note.desc),
-                  child: Text(
-                    note.desc,
-                    style: Theme.of(context).textTheme.headline2,
+            )),
+            const Divider(
+              thickness: 1,
+            ),
+            Row(
+              children: [
+                Expanded(
+                    child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.greenAccent,
                   ),
-                ),
-              )),
-              const Divider(
-                thickness: 1,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: Container(
+                  margin: const EdgeInsets.only(right: 10, top: 5),
+                  child: IconButton(
+                      tooltip: "Edit Note",
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NoteAddPage(note, 3)));
+                      },
+                      icon: const Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      )),
+                )),
+                Expanded(
+                  child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: Colors.greenAccent,
+                      color: Colors.redAccent,
                     ),
-                    margin: const EdgeInsets.only(right: 10, top: 5),
+                    margin: const EdgeInsets.only(left: 10, top: 5),
                     child: IconButton(
-                        tooltip: "Edit Note",
+                        tooltip: "Delete Note",
                         onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => NoteAddPage(note, 3)));
+                          _showSnackBar(
+                              context, note, "Are you sure delete the note");
                         },
                         icon: const Icon(
-                          Icons.edit,
+                          Icons.delete_rounded,
                           color: Colors.white,
                         )),
-                  )),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.redAccent,
-                      ),
-                      margin: const EdgeInsets.only(left: 10, top: 5),
-                      child: IconButton(
-                          tooltip: "Delete Note",
-                          onPressed: () {
-                            _showSnackBar(
-                                context, note, "Are you sure delete the note");
-                          },
-                          icon: const Icon(
-                            Icons.delete_rounded,
-                            color: Colors.white,
-                          )),
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-        )),
-      ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      )),
     );
   }
 
