@@ -4,7 +4,6 @@ import 'package:note/database/note_database.dart';
 import 'package:note/note/note.dart';
 import 'package:note/page/add_note_page.dart';
 import 'package:note/page/desc_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SeeNotePage extends StatefulWidget {
   const SeeNotePage({Key? key}) : super(key: key);
@@ -17,7 +16,6 @@ class _SeeNotePageState extends State<SeeNotePage> {
   bool isNull = true;
   late List<Note> notes;
   final NoteDataBase _dataBase = NoteDataBase();
-
 
   @override
   void initState() {
@@ -43,57 +41,56 @@ class _SeeNotePageState extends State<SeeNotePage> {
                 child: CircularProgressIndicator(),
               )
             : notes.isNotEmpty
+                ? ListView.builder(
+                    itemCount: notes.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SeeDescriptionPage(notes[index])));
+                        },
+                        // card long pressed when update note
+                        onLongPress: () {
+                          // update note false
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      NoteAddPage(notes[index], 2)));
+                        },
+                        leading: CircleAvatar(
+                          backgroundColor: notes[index].priority == 1
+                              ? Colors.redAccent
+                              : Colors.greenAccent,
+                          child: Icon(
+                            notes[index].priority == 1
+                                ? Icons.arrow_upward_rounded
+                                : Icons.arrow_downward_rounded,
+                            color: Colors.white,
+                          ),
+                        ),
+                        title: Hero(
+                            tag: Key(notes[index].title),
+                            child: Text(notes[index].title)),
+                        subtitle: Hero(
+                            tag: Key(notes[index].desc),
+                            child: _giveDesc(notes[index])),
 
-                    ? ListView.builder(
-                        itemCount: notes.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          SeeDescriptionPage(notes[index])));
-                            },
-                            // card long pressed when update note
-                            onLongPress: () {
-                              // update note false
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          NoteAddPage(notes[index], 2)));
-                            },
-                            leading: CircleAvatar(
-                              backgroundColor: notes[index].priority == 1
-                                  ? Colors.redAccent
-                                  : Colors.greenAccent,
-                              child: Icon(
-                                notes[index].priority == 1
-                                    ? Icons.arrow_upward_rounded
-                                    : Icons.arrow_downward_rounded,
-                                color: Colors.white,
-                              ),
-                            ),
-                            title: Hero(
-                                tag: Key(notes[index].title),
-                                child: Text(notes[index].title)),
-                            subtitle: Hero(
-                                tag: Key(notes[index].desc),
-                                child: _giveDesc(notes[index])),
-
-                            trailing: IconButton(
-                              icon: const Icon(
-                                Icons.delete_rounded,
-                                color: Colors.redAccent,
-                              ),
-                              onPressed: () {
-                                _showSnackBar(context, notes[index],
-                                    "Are you sure delete note");
-                              },
-                            ),
-                          );
-                        })
+                        trailing: IconButton(
+                          icon: const Icon(
+                            Icons.delete_rounded,
+                            color: Colors.redAccent,
+                          ),
+                          onPressed: () {
+                            _showSnackBar(context, notes[index],
+                                "Are you sure delete note");
+                          },
+                        ),
+                      );
+                    })
                 : const Center(
                     child: Text("Add Note"),
                   ),
@@ -151,5 +148,4 @@ class _SeeNotePageState extends State<SeeNotePage> {
             ? Text("${note.desc.substring(0, note.desc.indexOf("\n"))}.....")
             : Text(note.desc);
   }
-
 }
