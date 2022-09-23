@@ -25,18 +25,24 @@ class SeeDescriptionPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                note.title,
-                style: Theme.of(context).textTheme.headline1,
+              Hero(
+                tag: Key(note.title),
+                child: Text(
+                  note.title,
+                  style: Theme.of(context).textTheme.headline1,
+                ),
               ),
               const SizedBox(
                 height: 20,
               ),
               Expanded(
                   child: SingleChildScrollView(
-                child: Text(
-                  note.desc,
-                  style: Theme.of(context).textTheme.headline2,
+                child: Hero(
+                  tag: Key(note.desc),
+                  child: Text(
+                    note.desc,
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
                 ),
               )),
               const Divider(
@@ -45,9 +51,12 @@ class SeeDescriptionPage extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                      child: Card(
-                    elevation: 1,
-                    color: const Color.fromARGB(255, 234, 234, 234),
+                      child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.greenAccent,
+                    ),
+                    margin: const EdgeInsets.only(right: 10, top: 5),
                     child: IconButton(
                         tooltip: "Edit Note",
                         onPressed: () {
@@ -58,19 +67,26 @@ class SeeDescriptionPage extends StatelessWidget {
                         },
                         icon: const Icon(
                           Icons.edit,
+                          color: Colors.white,
                         )),
                   )),
                   Expanded(
-                    child: Card(
-                      elevation: 1,
-                      color: const Color.fromARGB(255, 234, 234, 234),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.redAccent,
+                      ),
+                      margin: const EdgeInsets.only(left: 10, top: 5),
                       child: IconButton(
                           tooltip: "Delete Note",
                           onPressed: () {
                             _showSnackBar(
                                 context, note, "Are you sure delete the note");
                           },
-                          icon: const Icon(Icons.delete_rounded)),
+                          icon: const Icon(
+                            Icons.delete_rounded,
+                            color: Colors.white,
+                          )),
                     ),
                   )
                 ],

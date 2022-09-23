@@ -21,8 +21,9 @@ class _NoteAddPageState extends State<NoteAddPage> {
   final _desc = TextEditingController();
   final double _minHeight = 5;
 
+  // this is the DropDownButton
   // this two are the choose option high means 1 and low means 2
-  final List<String> _priority = ["High", "Low"];
+  // final List<String> _priority = ["High", "Low"];
   late String _choosePriority;
 
   // init state ma set _choosePriority,TextFormField for title and TextFormField for desc
@@ -64,9 +65,9 @@ class _NoteAddPageState extends State<NoteAddPage> {
                   style: Theme.of(context).textTheme.headline1,
                 ),
                 SizedBox(
-                  height: _minHeight * 6,
+                  height: _minHeight * 2,
                 ),
-                DropdownButton<String>(
+                /* DropdownButton<String>(
                   itemHeight: 60,
                   elevation: 20,
                   items: _priority
@@ -81,7 +82,7 @@ class _NoteAddPageState extends State<NoteAddPage> {
                     });
                   },
                   value: _choosePriority,
-                ),
+                ),*/ // this is the dropdown button
                 SizedBox(
                   height: _minHeight * 3,
                 ),
@@ -89,7 +90,9 @@ class _NoteAddPageState extends State<NoteAddPage> {
                   controller: _title,
                   keyboardType: TextInputType.text,
                   decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Enter Title"),
+                      border: OutlineInputBorder(),
+                      labelText: "Enter Title",
+                      hintText: "Enter Title"),
                 ),
                 SizedBox(
                   height: _minHeight * 3,
@@ -101,10 +104,24 @@ class _NoteAddPageState extends State<NoteAddPage> {
                   maxLines: 5,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: "Enter Description"),
+                      labelText: "Enter Description",
+                      hintText: "Enter Description"),
                 ),
                 SizedBox(
                   height: _minHeight * 3,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: _minHeight * 3),
+                  child: Row(
+                    children: [
+                      Expanded(child: _radioListTile("High", Colors.redAccent)),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                          child: _radioListTile("Low", Colors.greenAccent)),
+                    ],
+                  ),
                 ),
                 ElevatedButton(
                     onPressed: () {
@@ -119,9 +136,11 @@ class _NoteAddPageState extends State<NoteAddPage> {
                       }
                     },
                     style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blueAccent),
                         padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: _minHeight * 3),
-                    )),
+                          EdgeInsets.symmetric(vertical: _minHeight * 3),
+                        )),
                     // if isInserted is true when add note else Update Note
                     child: widget.isInserted == 1
                         ? const Text("Add Note")
@@ -171,5 +190,27 @@ class _NoteAddPageState extends State<NoteAddPage> {
   void _showSnackBar(BuildContext context, String content) {
     var snackBar = SnackBar(content: Text(content));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  // this is make the radio button to the value and color
+  RadioListTile _radioListTile(String value, Color selectedColor) {
+    return RadioListTile(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        tileColor:
+            _choosePriority == value ? selectedColor : Colors.transparent,
+        activeColor: Colors.white,
+        value: value,
+        title: Text(
+          value,
+          style: TextStyle(
+            color: _choosePriority == value ? Colors.white : Colors.black,
+          ),
+        ),
+        groupValue: _choosePriority,
+        onChanged: (changedValue) {
+          setState(() {
+            _choosePriority = changedValue!;
+          });
+        });
   }
 }

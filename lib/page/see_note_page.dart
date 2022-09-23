@@ -34,6 +34,7 @@ class _SeeNotePageState extends State<SeeNotePage> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.blueAccent,
             automaticallyImplyLeading: false,
             title: const Text("Notes"),
           ),
@@ -73,10 +74,18 @@ class _SeeNotePageState extends State<SeeNotePage> {
                               color: Colors.white,
                             ),
                           ),
-                          title: Text(notes[index].title),
-                          subtitle: _giveDesc(notes[index]),
+                          title: Hero(
+                              tag: Key(notes[index].title),
+                              child: Text(notes[index].title)),
+                          subtitle: Hero(
+                              tag: Key(notes[index].desc),
+                              child: _giveDesc(notes[index])),
+
                           trailing: IconButton(
-                            icon: const Icon(Icons.delete_rounded),
+                            icon: const Icon(
+                              Icons.delete_rounded,
+                              color: Colors.redAccent,
+                            ),
                             onPressed: () {
                               _showSnackBar(context, notes[index],
                                   "Are you sure delete note");
@@ -88,6 +97,7 @@ class _SeeNotePageState extends State<SeeNotePage> {
                       child: Text("Add Note"),
                     ),
           floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.blueAccent,
             tooltip: "Add New Note",
             onPressed: () {
               // add new note
